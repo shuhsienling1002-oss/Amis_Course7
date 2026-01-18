@@ -5,7 +5,7 @@ from gtts import gTTS
 from io import BytesIO
 
 # --- 0. 系統配置 ---
-st.set_page_config(page_title="Unit 6: O kakaenen", page_icon="🍌", layout="centered")
+st.set_page_config(page_title="Unit 7: O hekal", page_icon="🏔️", layout="centered")
 
 # CSS 優化
 st.markdown("""
@@ -48,23 +48,23 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 1. 數據資料庫 (Unit 6 專屬) ---
+# --- 1. 數據資料庫 (Unit 7 專屬) ---
 
-# 單字：食物 (全部小寫)
+# 單字：大自然 (全部小寫)
 VOCABULARY = {
-    "hemay":    {"zh": "飯", "emoji": "🍚", "file": "u6_hemay"},
-    "nanom":    {"zh": "水", "emoji": "💧", "file": "u6_nanom"},
-    "pawli":    {"zh": "香蕉", "emoji": "🍌", "file": "u6_pawli"},
-    "konga":    {"zh": "地瓜", "emoji": "🍠", "file": "u6_konga"},
-    "dateng":   {"zh": "菜/蔬菜", "emoji": "🥬", "file": "u6_dateng"},
-    "mami'":    {"zh": "橘子/柑橘", "emoji": "🍊", "file": "u6_mami"}
+    "cidal":    {"zh": "太陽", "emoji": "☀️", "file": "u7_cidal"},
+    "folad":    {"zh": "月亮", "emoji": "🌙", "file": "u7_folad"},
+    "fo'is":    {"zh": "星星", "emoji": "⭐", "file": "u7_fois"},
+    "lotok":    {"zh": "山", "emoji": "⛰️", "file": "u7_lotok"},
+    "riyar":    {"zh": "海", "emoji": "🌊", "file": "u7_riyar"},
+    "kilang":   {"zh": "樹", "emoji": "🌳", "file": "u7_kilang"}
 }
 
-# 句型：喜好與動作
+# 句型：描述與存在
 SENTENCES = [
-    {"amis": "Maolah kako to pawli.", "zh": "我喜歡香蕉。", "file": "u6_s_like_banana"},
-    {"amis": "Komaen to konga.", "zh": "在吃地瓜。", "file": "u6_s_eat_sweetpotato"},
-    {"amis": "O maan koni?", "zh": "這是什麼？", "file": "u6_q_what"}
+    {"amis": "Ira ko cidal.", "zh": "有太陽 (天氣晴)。", "file": "u7_s_sun_is_out"},
+    {"amis": "Fangcal ko riyar.", "zh": "海很漂亮。", "file": "u7_s_beautiful_sea"},
+    {"amis": "O maan koni?", "zh": "這是什麼？", "file": "u7_q_what"}
 ]
 
 # --- 1.5 智慧語音核心 ---
@@ -97,9 +97,8 @@ if 'current_q' not in st.session_state:
 
 # --- 3. 學習模式 ---
 def show_learning_mode():
-    # 修正標題拼寫：Saka'enem
-    st.markdown("<h2 style='text-align: center;'>Saka'enem: O kakaenen</h2>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: gray;'>好吃的食物 😋</h4>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>Sakatopito: O hekal</h2>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center; color: gray;'>美麗的大自然 🏔️</h4>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     words = list(VOCABULARY.items())
@@ -119,74 +118,73 @@ def show_learning_mode():
     st.markdown("---")
     st.markdown("### 🗣️ 句型練習")
     
-    # 喜好
-    st.markdown("#### ❤️ 表達喜歡")
+    # 存在句
+    st.markdown("#### ☀️ 天氣/存在")
     s1 = SENTENCES[0]
     st.info(f"🔹 {s1['amis']} ({s1['zh']})")
     play_audio(s1['amis'], filename_base=s1.get('file'))
     
-    # 動作
-    st.markdown("#### 🍽️ 正在吃...")
+    # 形容詞句
+    st.markdown("#### ✨ 讚美")
     s2 = SENTENCES[1]
     st.warning(f"🔹 {s2['amis']} ({s2['zh']})")
     play_audio(s2['amis'], filename_base=s2.get('file'))
 
 # --- 4. 測驗模式 ---
 def show_quiz_mode():
-    # 修正標題拼寫：Saka'enem
-    st.markdown("<h2 style='text-align: center;'>🎮 Saka'enem 美食家</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>🎮 Sakatopito 小小探險家</h2>", unsafe_allow_html=True)
     progress = st.progress(st.session_state.current_q / 3)
     
     # 第一關：聽音辨位
     if st.session_state.current_q == 0:
-        st.markdown("### 第一關：想吃什麼？")
-        st.write("請聽聲音：")
-        play_audio("hemay", filename_base="u6_hemay")
+        st.markdown("### 第一關：這是什麼聲音？")
+        st.write("請聽單字：")
+        play_audio("riyar", filename_base="u7_riyar")
         
         c1, c2 = st.columns(2)
         with c1:
-            if st.button("🍚 hemay"):
+            if st.button("🌊 riyar (海)"):
                 st.balloons()
-                st.success("答對了！ Hemay 是飯！")
+                st.success("答對了！ Riyar 是海！")
                 time.sleep(1)
                 st.session_state.score += 100
                 st.session_state.current_q += 1
                 st.rerun()
         with c2:
-            if st.button("💧 nanom"): st.error("不對喔，nanom 是水！")
+            if st.button("⛰️ lotok (山)"): st.error("不對喔，lotok 是山！")
 
-    # 第二關：句子理解 (喜好)
+    # 第二關：句子理解
     elif st.session_state.current_q == 1:
-        st.markdown("### 第二關：我喜歡什麼？")
+        st.markdown("### 第二關：哪裡很漂亮？")
         st.markdown("#### 請聽句子：")
-        play_audio("Maolah kako to pawli.", filename_base="u6_s_like_banana")
+        play_audio("Fangcal ko riyar.", filename_base="u7_s_beautiful_sea")
         
-        st.write("請問句子裡的人喜歡什麼？")
+        st.write("請問句子說什麼很漂亮？")
         c1, c2 = st.columns(2)
         with c1:
-            if st.button("🍌 香蕉 (pawli)"):
+            if st.button("🌊 大海"):
                 st.snow()
-                st.success("沒錯！ Maolah kako to pawli.")
+                st.success("沒錯！ Fangcal ko riyar.")
                 time.sleep(1)
                 st.session_state.score += 100
                 st.session_state.current_q += 1
                 st.rerun()
         with c2:
-            if st.button("🍠 地瓜 (konga)"): st.error("不對喔！")
+            if st.button("☀️ 太陽"): st.error("不對喔！")
 
-    # 第三關：看圖問答 (綜合練習)
+    # 第三關：看圖問答
     elif st.session_state.current_q == 2:
         st.markdown("### 第三關：看圖回答")
         st.markdown("#### Q: O maan koni? (這是什麼？)")
-        play_audio("O maan koni?", filename_base="u6_q_what") 
+        play_audio("O maan koni?", filename_base="u7_q_what") 
         
-        st.markdown("<div style='font-size:80px; text-align:center;'>🍊</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-size:80px; text-align:center;'>🌙</div>", unsafe_allow_html=True)
         
-        options = ["O mami' (是橘子)", "O dateng (是菜)", "O hemay (是飯)"]
+        options = ["O folad (是月亮)", "O cidal (是太陽)", "O fo'is (是星星)"]
         choice = st.radio("請選擇：", options)
         
         if st.button("確定送出"):
-            if "mami'" in choice:
+            if "folad" in choice:
                 st.balloons()
                 st.success("太厲害了！全部答對！")
                 time.sleep(1)
@@ -204,7 +202,7 @@ def show_quiz_mode():
             st.rerun()
 
 # --- 5. 主程式入口 ---
-st.sidebar.title("Unit 6: O kakaenen 🍌")
+st.sidebar.title("Unit 7: O hekal 🏔️")
 mode = st.sidebar.radio("選擇模式", ["📖 學習單詞", "🎮 練習挑戰"])
 
 if mode == "📖 學習單詞":
