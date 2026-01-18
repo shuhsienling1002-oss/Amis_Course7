@@ -97,7 +97,8 @@ if 'current_q' not in st.session_state:
 
 # --- 3. 學習模式 ---
 def show_learning_mode():
-    st.markdown("<h2 style='text-align: center;'>Sakatopito: O hekal</h2>", unsafe_allow_html=True)
+    # 修正標題拼寫：Sakapito
+    st.markdown("<h2 style='text-align: center;'>Sakapito: O hekal</h2>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align: center; color: gray;'>美麗的大自然 🏔️</h4>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
@@ -132,7 +133,8 @@ def show_learning_mode():
 
 # --- 4. 測驗模式 ---
 def show_quiz_mode():
-    st.markdown("<h2 style='text-align: center;'>🎮 Sakatopito 小小探險家</h2>", unsafe_allow_html=True)
+    # 修正標題拼寫：Sakapito
+    st.markdown("<h2 style='text-align: center;'>🎮 Sakapito 小小探險家</h2>", unsafe_allow_html=True)
     progress = st.progress(st.session_state.current_q / 3)
     
     # 第一關：聽音辨位
