@@ -5,9 +5,9 @@ from gtts import gTTS
 from io import BytesIO
 
 # --- 0. 系統配置 ---
-st.set_page_config(page_title="Unit 3: O loma' no mako", page_icon="🏠", layout="centered")
+st.set_page_config(page_title="Unit 6: O kakaenen", page_icon="🍌", layout="centered")
 
-# CSS 優化 (卡片與按鈕樣式)
+# CSS 優化
 st.markdown("""
     <style>
     .stButton>button {
@@ -48,28 +48,27 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 1. 數據資料庫 (Unit 3 專屬) ---
+# --- 1. 數據資料庫 (Unit 6 專屬) ---
 
-# 單字：家庭成員
+# 單字：食物 (全部小寫)
 VOCABULARY = {
-    "Wama":     {"zh": "爸爸", "emoji": "👨", "file": "u3_wama"},
-    "Wina":     {"zh": "媽媽", "emoji": "👩", "file": "u3_wina"},
-    "Akong":    {"zh": "阿公", "emoji": "👴", "file": "u3_akong"},
-    "Ama":      {"zh": "阿嬤", "emoji": "👵", "file": "u3_ama"},
-    "Kaka":     {"zh": "哥哥/姊姊", "emoji": "👦", "file": "u3_kaka"},
-    "Safa":     {"zh": "弟弟/妹妹", "emoji": "👶", "file": "u3_safa"}
+    "hemay":    {"zh": "飯", "emoji": "🍚", "file": "u6_hemay"},
+    "nanom":    {"zh": "水", "emoji": "💧", "file": "u6_nanom"},
+    "pawli":    {"zh": "香蕉", "emoji": "🍌", "file": "u6_pawli"},
+    "konga":    {"zh": "地瓜", "emoji": "🍠", "file": "u6_konga"},
+    "dateng":   {"zh": "菜/蔬菜", "emoji": "🥬", "file": "u6_dateng"},
+    "mami'":    {"zh": "橘子/柑橘", "emoji": "🍊", "file": "u6_mami"}
 }
 
-# 句型：結合動作 (Unit 2) + 人物 (Unit 3)
+# 句型：喜好與動作
 SENTENCES = [
-    {"amis": "Romadiw ci Wina.", "zh": "媽媽在唱歌。", "file": "u3_s_mom_sings"},
-    {"amis": "Mafoti' ci Akong.", "zh": "阿公在睡覺。", "file": "u3_s_grandpa_sleeps"},
-    {"amis": "Cima ko romadiway?", "zh": "誰在唱歌？", "file": "u3_q_who_sings"}
+    {"amis": "Maolah kako to pawli.", "zh": "我喜歡香蕉。", "file": "u6_s_like_banana"},
+    {"amis": "Komaen to konga.", "zh": "在吃地瓜。", "file": "u6_s_eat_sweetpotato"},
+    {"amis": "O maan koni?", "zh": "這是什麼？", "file": "u6_q_what"}
 ]
 
 # --- 1.5 智慧語音核心 ---
 def play_audio(text, filename_base=None):
-    # 優先檢查是否有預錄的音檔
     if filename_base:
         path_m4a = f"audio/{filename_base}.m4a"
         if os.path.exists(path_m4a):
@@ -80,8 +79,8 @@ def play_audio(text, filename_base=None):
             st.audio(path_mp3, format='audio/mp3')
             return
 
-    # 如果沒有檔案，使用 Google小姐 (印尼語腔調模擬)
     try:
+        # 使用印尼語 (id) 模擬南島語系發音
         tts = gTTS(text=text, lang='id')
         fp = BytesIO()
         tts.write_to_fp(fp)
@@ -96,12 +95,12 @@ if 'score' not in st.session_state:
 if 'current_q' not in st.session_state:
     st.session_state.current_q = 0
 
-# --- 3. 學習模式 (Learning Mode) ---
+# --- 3. 學習模式 ---
 def show_learning_mode():
-    st.markdown("<h2 style='text-align: center;'>Sakatoolo: O loma' no mako</h2>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: gray;'>我的家庭 🏠</h4>", unsafe_allow_html=True)
+    # 修正標題拼寫：Saka'enem
+    st.markdown("<h2 style='text-align: center;'>Saka'enem: O kakaenen</h2>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center; color: gray;'>好吃的食物 😋</h4>", unsafe_allow_html=True)
     
-    # 顯示單字卡
     col1, col2 = st.columns(2)
     words = list(VOCABULARY.items())
     
@@ -118,84 +117,76 @@ def show_learning_mode():
                 play_audio(amis, filename_base=data.get('file'))
 
     st.markdown("---")
-    st.markdown("### 🗣️ 句型練習：誰在做什麼？")
+    st.markdown("### 🗣️ 句型練習")
     
-    # 句子 1
+    # 喜好
+    st.markdown("#### ❤️ 表達喜歡")
     s1 = SENTENCES[0]
-    st.info(f"🔹 {s1['amis']}")
-    st.caption(f"({s1['zh']})")
+    st.info(f"🔹 {s1['amis']} ({s1['zh']})")
     play_audio(s1['amis'], filename_base=s1.get('file'))
     
-    # 句子 2
+    # 動作
+    st.markdown("#### 🍽️ 正在吃...")
     s2 = SENTENCES[1]
-    st.info(f"🔹 {s2['amis']}")
-    st.caption(f"({s2['zh']})")
+    st.warning(f"🔹 {s2['amis']} ({s2['zh']})")
     play_audio(s2['amis'], filename_base=s2.get('file'))
-    
-    # 問答
-    st.markdown("#### ❓ 問答練習")
-    q = SENTENCES[2]
-    st.success(f"Q: {q['amis']} ({q['zh']})")
-    play_audio(q['amis'], filename_base=q.get('file'))
-    
-    st.warning("A: Ci Wina. (是媽媽。)")
-    play_audio("Ci Wina", filename_base="u3_wina")
 
-# --- 4. 測驗模式 (Quiz Mode) ---
+# --- 4. 測驗模式 ---
 def show_quiz_mode():
-    st.markdown("<h2 style='text-align: center;'>🎮 家庭小偵探</h2>", unsafe_allow_html=True)
+    # 修正標題拼寫：Saka'enem
+    st.markdown("<h2 style='text-align: center;'>🎮 Saka'enem 美食家</h2>", unsafe_allow_html=True)
     progress = st.progress(st.session_state.current_q / 3)
     
-    # 第一關：單字聽力
+    # 第一關：聽音辨位
     if st.session_state.current_q == 0:
-        st.markdown("### 第一關：這是誰？")
+        st.markdown("### 第一關：想吃什麼？")
         st.write("請聽聲音：")
-        play_audio("Akong", filename_base="u3_akong")
+        play_audio("hemay", filename_base="u6_hemay")
         
         c1, c2 = st.columns(2)
         with c1:
-            if st.button("👴 阿公"):
+            if st.button("🍚 hemay"):
                 st.balloons()
-                st.success("答對了！ Akong!")
+                st.success("答對了！ Hemay 是飯！")
                 time.sleep(1)
                 st.session_state.score += 100
                 st.session_state.current_q += 1
                 st.rerun()
         with c2:
-            if st.button("👵 阿嬤"): st.error("那是 Ama 喔！")
+            if st.button("💧 nanom"): st.error("不對喔，nanom 是水！")
 
-    # 第二關：句子理解
+    # 第二關：句子理解 (喜好)
     elif st.session_state.current_q == 1:
-        st.markdown("### 第二關：誰在唱歌？")
+        st.markdown("### 第二關：我喜歡什麼？")
         st.markdown("#### 請聽句子：")
-        play_audio("Romadiw ci Wina.", filename_base="u3_s_mom_sings")
+        play_audio("Maolah kako to pawli.", filename_base="u6_s_like_banana")
         
-        st.write("請問句子裡是誰在唱歌？")
+        st.write("請問句子裡的人喜歡什麼？")
         c1, c2 = st.columns(2)
         with c1:
-            if st.button("👩 媽媽"):
+            if st.button("🍌 香蕉 (pawli)"):
                 st.snow()
-                st.success("沒錯！ Romadiw ci Wina.")
+                st.success("沒錯！ Maolah kako to pawli.")
                 time.sleep(1)
                 st.session_state.score += 100
                 st.session_state.current_q += 1
                 st.rerun()
         with c2:
-            if st.button("👶 妹妹"): st.error("不對喔！")
+            if st.button("🍠 地瓜 (konga)"): st.error("不對喔！")
 
-    # 第三關：問答
+    # 第三關：看圖問答 (綜合練習)
     elif st.session_state.current_q == 2:
         st.markdown("### 第三關：看圖回答")
-        st.markdown("#### Q: Cima ko mafoti'ay? (誰在睡覺？)")
-        play_audio("Cima ko mafoti'ay?", filename_base="u3_q_who_sleeps") # 模擬問句
+        st.markdown("#### Q: O maan koni? (這是什麼？)")
+        play_audio("O maan koni?", filename_base="u6_q_what") 
         
-        st.markdown("<div style='font-size:80px; text-align:center;'>👴💤</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-size:80px; text-align:center;'>🍊</div>", unsafe_allow_html=True)
         
-        options = ["Ci Wama (是爸爸)", "Ci Akong (是阿公)", "Ci Safa (是弟弟)"]
+        options = ["O mami' (是橘子)", "O dateng (是菜)", "O hemay (是飯)"]
         choice = st.radio("請選擇：", options)
         
         if st.button("確定送出"):
-            if "Akong" in choice:
+            if "mami'" in choice:
                 st.balloons()
                 st.success("太厲害了！全部答對！")
                 time.sleep(1)
@@ -213,7 +204,7 @@ def show_quiz_mode():
             st.rerun()
 
 # --- 5. 主程式入口 ---
-st.sidebar.title("Unit 3: O loma' 🏠")
+st.sidebar.title("Unit 6: O kakaenen 🍌")
 mode = st.sidebar.radio("選擇模式", ["📖 學習單詞", "🎮 練習挑戰"])
 
 if mode == "📖 學習單詞":
